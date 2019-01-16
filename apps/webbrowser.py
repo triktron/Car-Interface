@@ -17,23 +17,8 @@ import os
 WINDOWS = (platform.system() == "Windows")
 LINUX = (platform.system() == "Linux")
 
-NAME="maps"
-ICON="icons/maps.png"
-
-scriptKEY="""
-document.head.innerHTML += '<link href="https://mottie.github.io/Keyboard/css/keyboard.css" rel="stylesheet"><style>div#searchboxinput_keyboard {background: white !important}</style>';
-var script = document.createElement('script');
-document.head.appendChild(script)
-script.onload = function() {
-var script = document.createElement('script');
-script.src = "https://mottie.github.io/Keyboard/js/jquery.keyboard.js";
-script.onload = function() {
-       $('input').keyboard();
-}
-document.head.appendChild(script)
-}
-script.src = "https://mottie.github.io/Keyboard/docs/js/jquery-latest.min.js";
-"""
+NAME="browser"
+ICON="icons/webview.png"
 
 app = None
 
@@ -69,7 +54,7 @@ class MainFrame(wx.Frame):
             cef.WindowUtils.InstallX11ErrorHandlers()
 
         wx.Frame.__init__(self, parent=None, id=wx.ID_ANY,
-                          title='maps', size=(800,480), style=wx.DEFAULT_FRAME_STYLE | wx.STAY_ON_TOP)
+                          title='wxPython example', size=(800,480))
         # wxPython will set a smaller size when it is bigger
         # than desktop size.
         print("[webbrowser.py] MainFrame actual size: %s" % self.GetSize())
@@ -112,7 +97,7 @@ class MainFrame(wx.Frame):
         window_info.SetAsChild(self.browser_panel.GetHandle(),
                                [0, 0, width, height])
         self.browser = cef.CreateBrowserSync(window_info,
-                                             url="http://www.google.com/maps")
+                                             url="https://www.google.com/")
         self.browser.SetClientHandler(FocusHandler())
 
     def OnSetFocus(self, _):
@@ -154,13 +139,9 @@ class MainFrame(wx.Frame):
         self.browser = None
 
 class FocusHandler(object):
-    def OnLoadingStateChange(self, browser, is_loading, **_):
-            if not is_loading:
-                browser.ExecuteJavascript(scriptKEY)
-
     def OnGotFocus(self, browser, **_):
         # Temporary fix for focus issues on Linux (Issue #284).
-        browser.SetFocus(True)
         if LINUX:
             print("[webbrowser.py] FocusHandler.OnGotFocus:"
                   " keyboard focus fix (Issue #284)")
+            browser.SetFocus(True)

@@ -10,146 +10,114 @@ __version__ = "0.1.0"
 __license__ = "MIT"
 
 import wx
+import time
 from os.path import dirname, basename, isfile
 import glob
 import os
 import sys
 import re
 import importlib
-from threading import Timer
-import time
 
-def load_plugins():
-    pysearchre = re.compile('.py$', re.IGNORECASE)
-    pluginfiles = filter(pysearchre.search,
-                           os.listdir(os.path.join(os.path.dirname(__file__),
-                                                 'apps')))
-    form_module = lambda fp: '.' + os.path.splitext(fp)[0]
-    plugins = map(form_module, pluginfiles)
-    # import parent module / namespace
-    importlib.import_module('apps')
-    modules = []
-    for plugin in plugins:
-             if not plugin.startswith('__'):
-                 modules.append(importlib.import_module(plugin, package="apps"))
+class Menu(wx.Frame):
+    bgColor = "#211535"
+    bgColorSidebar = "#4a3172"
 
-    return modules
+    def __init__(self):
+        wx.Frame.__init__(self, None, wx.ID_ANY, "Car Interface", style= wx.SYSTEM_MENU | wx.CAPTION | wx.CLOSE_BOX, size=(800,480))
 
-lastAppId = 0
-menu = None
-menuSidebar = None
-currentApp = None
+        menu = wx.Panel(self, wx.ID_ANY, size=(720,480), pos=(80,0))
+        menu.SetBackgroundColour(self.bgColor)
+        menuSidebar = wx.Panel(self, wx.ID_ANY, size=(80,480))
+        menuSidebar.SetBackgroundColour(self.bgColorSidebar)
 
-bgColor = "#211535"
-bgColorSidebar = "#4a3172"
+        self.setupSidebar(menuSidebar)
 
-def toggleHome():
-    global menu
-    global currentApp
+        modules = self.load("apps")
+        for f in modules:
+            if hasattr(f, 'start'):
+                self.addApp(f, menu)
 
-    if currentApp == None:
-        return
+        modules = self.load("services")
+        for f in modules:
+            if hasattr(f, 'start'):
+                f.start(self)
 
-    """ switch between the app and the menu """
-    if currentApp.panel.IsShown():
-        currentApp.panel.Hide()
-        menu.Show()
-        menuSidebar.Show()
-    else:
-        currentApp.panel.Show()
-        menu.Hide()
-        menuSidebar.Hide()
+        self.timer = wx.Timer(self)
+        self.Bind(wx.EVT_TIMER, self.update, self.timer)
+        self.timer.Start(1000)
 
-def addApp(app, panel):
-    global lastAppId
-    bmp = wx.Bitmap(app.ICON, wx.BITMAP_TYPE_ANY)
-    button = wx.BitmapButton(panel, id=wx.ID_ANY, bitmap=bmp,
-                              size=(bmp.GetWidth()+10, bmp.GetHeight()+10))
-    button.SetBackgroundColour(bgColor)
-    button.SetWindowStyleFlag(wx.NO_BORDER)
+        self.Bind(wx.EVT_CHAR_HOOK, self.onKeyPress)
+        self.Bind(wx.EVT_CLOSE, self.OnClose)
 
+        self.Center()
+        self.Show()
 
-    button.Bind(wx.EVT_BUTTON, lambda click: startApp(app))
-    button.SetPosition((10 + 140*lastAppId,10))
-    lastAppId = lastAppId + 1
-
-def startApp(app):
-    global currentApp
-    if hasattr(app, 'start'):
-        currentApp = app
-        toggleHome()
-
-def onKeyPress(event):
-    global currentApp
-    keycode = event.GetKeyCode()
-    if keycode == wx.WXK_TAB:
+    def OnClose(self, event):
+        print("OnClose called")
+        if self.currentApp >= 0 and hasattr(self.apps[self.currentApp], 'stop'):
+            self.apps[self.currentApp].stop()
         event.Skip()
-        toggleHome()
 
-class RepeatedTimer(object):
-    def __init__(self, interval, function, *args, **kwargs):
-        self._timer     = None
-        self.interval   = interval
-        self.function   = function
-        self.args       = args
-        self.kwargs     = kwargs
-        self.is_running = False
-        self.start()
+    def setupSidebar(self, panel):
+        self.clockElement = wx.StaticText(panel, id=wx.ID_ANY, label=time.strftime('%H:%M'), pos=(9,400))
+        font = wx.Font(18, wx.DECORATIVE, wx.NORMAL, wx.NORMAL)
+        self.clockElement.SetFont(font)
+        self.clockElement.SetForegroundColour((255,255,255))
 
-    def _run(self):
-        self.is_running = False
-        self.start()
-        self.function(*self.args, **self.kwargs)
+    def load(self, path):
+        pysearchre = re.compile('.py$', re.IGNORECASE)
+        pluginfiles = filter(pysearchre.search, os.listdir(os.path.join(os.path.dirname(__file__), path)))
+        form_module = lambda fp: '.' + os.path.splitext(fp)[0]
+        plugins = map(form_module, pluginfiles)
+        # import parent module / namespace
+        importlib.import_module(path)
+        modules = []
+        for plugin in plugins:
+                 if not plugin.startswith('__'):
+                     modules.append(importlib.import_module(plugin, package=path))
 
-    def start(self):
-        if not self.is_running:
-            self._timer = Timer(self.interval, self._run)
-            self._timer.start()
-            self.is_running = True
+        return modules
 
-    def stop(self):
-        self._timer.cancel()
-        self.is_running = False
+    def onKeyPress(self, event):
+        keycode = event.GetKeyCode()
+        if keycode == wx.WXK_TAB:
+            event.Skip()
+            self.toggleHome()
 
-timeElement = None
-timerThread = None
-def setupSidebar(panel, frame):
-    global timeElement
-    global timerThread
-    timeElement = wx.StaticText(panel, id=wx.ID_ANY, label=time.strftime('%H:%M'), pos=(9,400))
-    font = wx.Font(18, wx.DECORATIVE, wx.NORMAL, wx.NORMAL)
-    timeElement.SetFont(font)
-    timeElement.SetForegroundColour((255,255,255))
-    timerThread = RepeatedTimer(1, updateTime)
-    frame.Bind(wx.EVT_CLOSE, OnClose)
+    apps = []
+    currentApp = -1
+    isMenuOpen = True
 
-def OnClose(evnt):
-    global timerThread
-    timerThread.stop()
-    print("exit")
-    wx.GetApp().ExitMainLoop()
+    def addApp(self, app, panel):
+        print(app.NAME)
+        bmp = wx.Bitmap(app.ICON, wx.BITMAP_TYPE_ANY)
+        button = wx.BitmapButton(panel, id=wx.ID_ANY, bitmap=bmp, size=(bmp.GetWidth()+10, bmp.GetHeight()+10))
+        button.SetBackgroundColour(self.bgColor)
+        button.SetWindowStyleFlag(wx.NO_BORDER)
 
-def updateTime():
-    global timeElement
-    timeElement.SetLabel(time.strftime('%H:%M'))
+        button.Bind(wx.EVT_BUTTON, lambda click: self.startApp(app))
 
-def init(frame):
-    global menu
-    global menuSidebar
-    menu = wx.Panel(frame, wx.ID_ANY, size=(720,480), pos=(80,0))
-    menu.SetBackgroundColour(bgColor)
-    menuSidebar = wx.Panel(frame, wx.ID_ANY, size=(80,480))
-    menuSidebar.SetBackgroundColour(bgColorSidebar)
-    setupSidebar(menuSidebar, frame)
-    menu.Show()
-    menuSidebar.Show()
-    frame.Bind(wx.EVT_CHAR_HOOK, onKeyPress)
-    modules = load_plugins()
-    for f in modules:
-        if hasattr(f, 'init'):
-            panel = wx.Panel(frame, wx.ID_ANY, size=(800,480))
-            panel.Hide()
-            app = f.init(panel)
-            addApp(f, menu)
+        button.SetPosition((10 + 140*(len(self.apps) % 5),10 + (len(self.apps) - len(self.apps) % 5) / 5 * 140))
+        self.apps.append(app)
 
-    frame.Layout()
+    def startApp(self, app):
+        if hasattr(app, 'start'):
+            if self.currentApp >= 0 and hasattr(self.apps[self.currentApp], 'stop'):
+                self.apps[self.currentApp].stop()
+            app.start(self)
+            app.frame.Bind(wx.EVT_CHAR_HOOK, self.onKeyPress)
+            self.currentApp = self.apps.index(app)
+
+    def toggleHome(self):
+        if self.currentApp < 0:
+            return
+        if self.isMenuOpen:
+            # self.Show()
+            self.apps[self.currentApp].frame.Hide()
+        else:
+            # self.Hide()
+            self.apps[self.currentApp].frame.Show()
+        self.isMenuOpen = not self.isMenuOpen
+
+    def update(self, event):
+        self.clockElement.SetLabel(time.strftime('%H:%M'))

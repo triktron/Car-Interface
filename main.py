@@ -1,16 +1,14 @@
 #!/usr/bin/python
 
 import wx
-import menu
+from menu import Menu
 
 def main():
     app = wx.App()
-    frame = wx.Frame(None, wx.ID_ANY, 'CAR Interface', style= wx.SYSTEM_MENU | wx.CAPTION | wx.CLOSE_BOX, size=(800,480))
+    menu = Menu()
 
-    menu.init(frame);
+    
 
-    frame.Show()
-    frame.Centre()
     app.MainLoop()
 
 
