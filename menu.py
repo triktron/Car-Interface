@@ -90,7 +90,7 @@ class Menu(wx.Frame):
 
     def addApp(self, app, panel):
         print(app.NAME)
-        bmp = wx.Bitmap(app.ICON, wx.BITMAP_TYPE_ANY)
+        bmp = wx.Bitmap(os.path.dirname(sys.argv[0]) + "/" + app.ICON, wx.BITMAP_TYPE_ANY)
         button = wx.BitmapButton(panel, id=wx.ID_ANY, bitmap=bmp, size=(bmp.GetWidth()+10, bmp.GetHeight()+10))
         button.SetBackgroundColour(self.bgColor)
         button.SetWindowStyleFlag(wx.NO_BORDER)

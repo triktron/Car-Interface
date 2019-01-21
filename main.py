@@ -7,8 +7,6 @@ def main():
     app = wx.App()
     menu = Menu()
 
-    
-
     app.MainLoop()
 
 

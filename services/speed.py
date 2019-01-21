@@ -17,10 +17,10 @@ def start(app):
     menu = app
     app.speed = wx.Timer(app)
     app.Bind(wx.EVT_TIMER, p, app.speed)
-    app.speed.Start(100)
+    app.speed.Start(1)
 
 def p(event):
     global menu
     for f in menu.apps:
         if f.NAME == "speed":
-            f.messg(int(round(time.time() * 50)) % 100)
+            f.messg(float(time.time() * 10) % 20)
