@@ -18,6 +18,11 @@ import sys
 import re
 import importlib
 
+if getattr(sys, 'frozen', False):
+    bundle_dir = sys._MEIPASS
+else:
+    bundle_dir = os.path.dirname(os.path.abspath(__file__))
+
 class Menu(wx.Frame):
     bgColor = "#211535"
     bgColorSidebar = "#4a3172"
@@ -66,7 +71,7 @@ class Menu(wx.Frame):
 
     def load(self, path):
         pysearchre = re.compile('.py$', re.IGNORECASE)
-        pluginfiles = filter(pysearchre.search, os.listdir(os.path.join(os.path.dirname(__file__), path)))
+        pluginfiles = filter(pysearchre.search, os.listdir(os.path.join(bundle_dir, path)))
         form_module = lambda fp: '.' + os.path.splitext(fp)[0]
         plugins = map(form_module, pluginfiles)
         # import parent module / namespace
@@ -90,7 +95,7 @@ class Menu(wx.Frame):
 
     def addApp(self, app, panel):
         print(app.NAME)
-        bmp = wx.Bitmap(os.path.dirname(sys.argv[0]) + "/" + app.ICON, wx.BITMAP_TYPE_ANY)
+        bmp = wx.Bitmap(os.path.join(bundle_dir, app.ICON), wx.BITMAP_TYPE_ANY) # "/" + os.path.dirname(sys.argv[0]) +
         button = wx.BitmapButton(panel, id=wx.ID_ANY, bitmap=bmp, size=(bmp.GetWidth()+10, bmp.GetHeight()+10))
         button.SetBackgroundColour(self.bgColor)
         button.SetWindowStyleFlag(wx.NO_BORDER)
