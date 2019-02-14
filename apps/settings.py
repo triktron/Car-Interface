@@ -10,12 +10,19 @@ __version__ = "0.1.0"
 __license__ = "MIT"
 
 import wx
+import os
+import sys
 
 NAME="settings"
 ICON="icons/settings.png"
 
 app = None
 frame = None
+
+if getattr(sys, 'frozen', False):
+    bundle_dir = sys._MEIPASS
+else:
+    bundle_dir = os.path.dirname(os.path.abspath(__file__))
 
 def start(app):
     global frame
@@ -53,8 +60,8 @@ class MainFrame(wx.Frame):
 
         self.m_bpButton1 = wx.BitmapToggleButton( sbSizer1.GetStaticBox(), wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
 
-        self.m_bpButton1.SetBitmap( wx.Bitmap( u"../icons/btn_off.png", wx.BITMAP_TYPE_ANY ) )
-        self.m_bpButton1.SetBitmapPressed( wx.Bitmap( u"../icons/btn_on.png", wx.BITMAP_TYPE_ANY ) )
+        self.m_bpButton1.SetBitmap( wx.Bitmap( os.path.join(bundle_dir, "../icons/btn_off.png"), wx.BITMAP_TYPE_ANY ) )
+        self.m_bpButton1.SetBitmapPressed( wx.Bitmap( os.path.join(bundle_dir, "../icons/btn_on.png"), wx.BITMAP_TYPE_ANY ) )
         bSizer2.Add( self.m_bpButton1, 0, wx.ALL, 5 )
 
 
@@ -72,8 +79,8 @@ class MainFrame(wx.Frame):
 
         self.m_bpButton11 = wx.BitmapToggleButton( sbSizer1.GetStaticBox(), wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
 
-        self.m_bpButton11.SetBitmap( wx.Bitmap( u"../icons/btn_off.png", wx.BITMAP_TYPE_ANY ) )
-        self.m_bpButton11.SetBitmapPressed( wx.Bitmap( u"../icons/btn_on.png", wx.BITMAP_TYPE_ANY ) )
+        self.m_bpButton11.SetBitmap( wx.Bitmap( os.path.join(bundle_dir, "../icons/btn_off.png"), wx.BITMAP_TYPE_ANY ) )
+        self.m_bpButton11.SetBitmapPressed( wx.Bitmap( os.path.join(bundle_dir, "../icons/btn_on.png"), wx.BITMAP_TYPE_ANY ) )
         bSizer21.Add( self.m_bpButton11, 0, wx.ALL, 5 )
 
 
