@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="css/speed.css">
+    <script src="js/gauge.min.js" charset="utf-8"></script>
+
+    <style media="screen">
+    html, body {
+ width: 100%;
+ height: 100%;
+ margin: 0;
+ padding: 0;
+}
+    </style>
+  </head>
+  <body>
+
+        <canvas class="speed" data-type="radial-gauge"
+            data-width="400"
+            data-height="400"
+            data-units="Km/h"
+            data-min-value="0"
+            data-max-value="20"
+            data-major-ticks="0,2,4,6,8,10,12,14,16,18,20"
+            data-minor-ticks="2"
+            data-stroke-ticks="true"
+            data-highlights='[
+            {"from": 16, "to": 18, "color": "rgba(200, 50, 50, .75)"},
+                {"from": 18, "to": 20, "color": "rgba(240, 50, 50, 1)"}
+            ]'
+            data-color-plate="#fff"
+            data-border-shadow-width="0"
+            data-borders="false"
+            data-needle-type="arrow"
+            data-needle-width="2"
+            data-needle-circle-size="7"
+            data-needle-circle-outer="true"
+            data-needle-circle-inner="false"
+            	data-animation="false"
+        ></canvas>
+
+        <canvas class="batt" data-type="linear-gauge"
+    data-width="120"
+    data-height="400"
+    data-min-value="0"
+    data-max-value="100"
+    data-major-ticks="0,10,20,30,40,50,60,70,80,90,100"
+    data-minor-ticks="2"
+    data-stroke-ticks="true"
+    data-highlights='[ {"from": 0, "to": 20, "color": "rgba(200, 50, 50, .75)"} ]'
+    data-color-plate="#211535"
+    data-border-shadow-width="0"
+    data-borders="false"
+    data-needle-type="arrow"
+    data-needle-width="2"
+    data-tick-side="left"
+    data-number-side="left"
+    data-needle-side="left"
+    data-bar-begin-circle="false"
+    data-value-box="false"
+      data-animation="false"
+      data-color-major-ticks="#FFF"
+        data-color-minor-ticks="#ddd"
+        data-color-numbers="#eee"
+></canvas>
+
+        <script src="js/speed.js" charset="utf-8"></script>
+
+  </body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+  <div class="sidebar">
+    <button type="button" class="backBTN">back</button>
+    <div class="time"></div>
+  </div>
+  <div class="apps">
+    <div class="app">
+      <a href="settings.html"><img src="icons/settings.png" alt=""></a>
+    </div>
+    <div class="app">
+      <a href="https://www.belgie.fm"><img src="icons/music.png" alt=""></a>
+    </div>
+    <div class="app">
+      <a href="speed.html"><img src="icons/speed.png" alt=""></a>
+    </div>
+    <div class="app">
+      <a href="https://yandex.com/maps/?ll=3.261693%2C50.813944&z=12"><img src="icons/maps.png" alt=""></a>
+    </div>
+    <div class="app">
+      <a href="http://open.spotify.com"><img src="icons/spotify.png" alt=""></a>
+    </div>
+  </div>
+  <webview id="appView" src="blank.html" nodeintegration></webview>
+  <div class="spinner">
+    <div class="rect1"></div>
+    <div class="rect2"></div>
+    <div class="rect3"></div>
+    <div class="rect4"></div>
+    <div class="rect5"></div>
+  </div>
+  <script src="js/index.js" charset="utf-8"></script>
+</body>
+
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <link rel="stylesheet" href="css/settings.css">
+  <link rel="stylesheet" href="css/ranger.css">
+  <!-- <script src="js/jquery.slim.min.js"></script>
+<script src="js/rangeslider.min.js"></script>
+<link href="css/rangeslider.min.css" rel="stylesheet"> -->
+
+  <!-- boostrap -->
+  <link href="css/libs/bootstrap.min.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+  <!-- <div class="brightness-div">
+          <div class="brightness"></div>
+        </div> -->
+  <!-- <input class="brightness" type="range" min="10" max="255" step="5"
+   oninput="setBrightness(this.value)" onchange="setBrightness(this.value)"> -->
+
+  <div class="range">
+    <div class="done"></div>
+    <input type="range" min="1" max="100" value="40">
+  </div>
+
+  <div class="buttons">
+    <!-- <button type="button" class="btn btn-danger">Danger</button> -->
+    <button id="reboot" class="btn btn-large btn-danger" data-toggle="confirmation" data-btn-ok-label="Yes, reboot." data-btn-ok-class="btn-success" data-btn-ok-icon-class="material-icons" data-btn-ok-icon-content="check"
+      data-btn-cancel-label="Stoooop!" data-btn-cancel-class="btn-danger" data-btn-cancel-icon-class="material-icons" data-btn-cancel-icon-content="close" data-title="Is it ok?" data-content="This might be dangerous">
+      Reboot
+    </button>
+
+    <button id="shutdown" class="btn btn-large btn-danger" data-toggle="confirmation" data-btn-ok-label="Yes, shutdown." data-btn-ok-class="btn-success" data-btn-ok-icon-class="material-icons" data-btn-ok-icon-content="check"
+      data-btn-cancel-label="Stoooop!" data-btn-cancel-class="btn-danger" data-btn-cancel-icon-class="material-icons" data-btn-cancel-icon-content="close" data-title="Is it ok?" data-content="This might be dangerous">
+      Shutdown
+    </button>
+
+    <button id="devtools" class="btn btn-large btn-danger openDev">
+      Open Dev Tools
+    </button>
+  </div>
+
+
+  <!-- <script src="js/libs/jquery-1.11.2.min.js"></script> -->
+  <script type="text/javascript">
+    window.$ = window.jQuery = require('./js/libs/jquery-1.11.2.min.js');
+  </script>
+  <script src="js/libs/bootstrap.min.js"></script>
+  <script src="js/libs/bootstrap-confirmation.min.js"></script>
+  <script src="js/settings.js" charset="utf-8"></script>
+</body>
+
+</html>

@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Bootstrap Confirmation</title>
+
+
+
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <link href="http://bootstrap-confirmation.js.org/assets/css/docs.min.css" rel="stylesheet">
+  <link href="http://bootstrap-confirmation.js.org/assets/css/style.css" rel="stylesheet">
+
+  <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+  <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+  <script src="http://bootstrap-confirmation.js.org/node_modules/bootstrap-confirmation2/bootstrap-confirmation.min.js"></script>
+</head>
+
+<body>
+  <!-- Main navigation
+  =========================================== -->
+  <div class="bs-example">
+    <button class="btn btn-large btn-primary" data-toggle="confirmation"
+            data-btn-ok-label="Continue" data-btn-ok-icon="glyphicon glyphicon-share-alt"
+            data-btn-ok-class="btn-success"
+            data-btn-cancel-label="Stoooop!" data-btn-cancel-icon="glyphicon glyphicon-ban-circle"
+            data-btn-cancel-class="btn-danger"
+            data-title="Is it ok?" data-content="This might be dangerous">
+      Confirmation
+    </button>
+  </div>
+
+
+
+<script>
+  $('[data-toggle=confirmation]').confirmation({placement:"bottom"});
+</script>
+
+
+
+</body>
+</html>

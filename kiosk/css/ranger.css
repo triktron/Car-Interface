@@ -1,0 +1,49 @@
+.range input[type=range] {
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  width: 100%; /* Specific width is required for Firefox. */
+  background: transparent; /* Otherwise white in Chrome */
+}
+
+.range input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+
+.range input[type=range]:focus {
+  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+}
+
+.range input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  background-color: rgb(4, 180, 4);
+    border-radius: 1.6em;
+    border: 0.4em solid rgba(0, 0, 0, 0);
+    width: 1em;
+    height: 1em;
+   margin-top: -4px;
+}
+
+.range input[type=range]:active::-webkit-slider-thumb {
+  -webkit-appearance: none;
+    /*background-color: rgb(4, 180, 4);*/
+    border-radius: 1.2em;
+    border: 0.3em solid rgba(255, 255, 255, 0.2);
+    width: 1.6em;
+    height: 1.6em;
+   margin-top: -8px;
+
+  z-index:2;
+}
+
+.range .done {
+  position: fixed;
+  background-color: rgb(4, 180, 4);
+    margin-top: 0.7em;
+    height: 0.3em;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+     background-color: #ddd;
+    height: 0.3em;
+    margin: 0.85em 0;
+}
